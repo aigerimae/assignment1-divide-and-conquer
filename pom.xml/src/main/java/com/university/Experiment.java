@@ -40,4 +40,25 @@ public class Experiment {
         QuickSorter.sort(copy);
         return System.nanoTime() - start;
     }
+
+    public static long timeSelect(int[] arr, int k) {
+        int[] copy = arr.clone();
+        long start = System.nanoTime();
+        DeterministicSelector.select(copy, k);
+        return System.nanoTime() - start;
+    }
+
+    public static Point[] generatePoints(int n) {
+        Point[] points = new Point[n];
+        for (int i = 0; i < n; i++) {
+            points[i] = new Point(RANDOM.nextDouble() * 1_000_000, RANDOM.nextDouble() * 1_000_000);
+        }
+        return points;
+    }
+
+    public static long timeClosestPair(Point[] points) {
+        long start = System.nanoTime();
+        ClosestPairSolver.closestPair(points);
+        return System.nanoTime() - start;
+    }
 }

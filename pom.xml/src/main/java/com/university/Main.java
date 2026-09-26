@@ -25,8 +25,22 @@ public class Main {
                     writer.printf("QuickSort,%s,%d,%d,%d,%d%n",
                             type, n, quickTime, QuickSorter.maxDepth, QuickSorter.comparisons);
 
+                    long selectTime = Experiment.timeSelect(data, n / 2);
+                    writer.printf("Select,%s,%d,%d,%d,%d%n",
+                            type, n, selectTime, 0, 0);
+
                     System.out.printf("Done: n=%d, type=%s%n", n, type);
                 }
+            }
+
+            // Closest Pair — только для random-подобных точек, без input_type
+            int[] pointSizes = {100, 1000, 5000, 20000};
+            for (int n : pointSizes) {
+                Point[] points = Experiment.generatePoints(n);
+                long closestTime = Experiment.timeClosestPair(points);
+                writer.printf("ClosestPair,RANDOM,%d,%d,%d,%d%n",
+                        n, closestTime, 0, 0);
+                System.out.printf("Done ClosestPair: n=%d%n", n);
             }
         }
 
