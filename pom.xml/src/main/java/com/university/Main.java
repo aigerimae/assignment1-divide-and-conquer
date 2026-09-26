@@ -1,17 +1,35 @@
 package com.university;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        int[] sizes = {100, 1000, 10000, 100000};
+        Experiment.InputType[] types = Experiment.InputType.values();
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("results/results.csv"))) {
+            writer.println("algorithm,input_type,n,time_ns,max_depth,comparisons");
+
+            for (int n : sizes) {
+                for (Experiment.InputType type : types) {
+                    int[] data = Experiment.generate(n, type);
+
+                    long mergeTime = Experiment.timeMergeSort(data);
+                    writer.printf("MergeSort,%s,%d,%d,%d,%d%n",
+                            type, n, mergeTime, MergeSorter.maxDepth, MergeSorter.comparisons);
+
+                    long quickTime = Experiment.timeQuickSort(data);
+                    writer.printf("QuickSort,%s,%d,%d,%d,%d%n",
+                            type, n, quickTime, QuickSorter.maxDepth, QuickSorter.comparisons);
+
+                    System.out.printf("Done: n=%d, type=%s%n", n, type);
+                }
+            }
         }
+
+        System.out.println("Results saved to results/results.csv");
     }
 }
